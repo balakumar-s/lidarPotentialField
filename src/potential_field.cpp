@@ -16,9 +16,9 @@ void callback(const sensor_msgs::LaserScan::ConstPtr& scan_in)
 {
 	sensor_msgs::LaserScan scan_filtered=*scan_in;
 	int total_points=(scan_filtered.angle_max-scan_filtered.angle_min)/scan_filtered.angle_increment;
-	float forces[360][2],force[2];
+	float forces[360][2],force_v[2],force,theta;
 	int parm = 1233;
-	force = [0,0];
+	force_v = [0,0];
 	for (int i=0;i<total_points;i++)
 	{
 		if(scan_filtered.ranges[i]==0)
@@ -35,9 +35,10 @@ void callback(const sensor_msgs::LaserScan::ConstPtr& scan_in)
 	   normal_y = y/sqrt(pow(x,2)+pow(y,2));
 	   forces[i][0] = ((parm/(pow(0.01*scan_filtered.ranges[i],2)))*normal_x);
 	   forces[i][1] = ((parm/(pow(0.01*scan_filtered.ranges[i],2)))*normal_y);
-	   force[0]+ =  forces[i][0];
-	   force[1]+ =  forces[i][1];
+	   force_v[0]+ =  forces[i][0];
+	   force_v[1]+ =  forces[i][1];
 	   
 	}
-	 
+	  force = sqrt(pow(force_v[0],2) + pow(force_v[1],2));
+	  theta = atan(force_v[1],force_v[0]);
 }
