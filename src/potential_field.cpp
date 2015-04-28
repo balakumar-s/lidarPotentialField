@@ -6,7 +6,7 @@
 #include <math.h>
 #include <std_msgs/Float32.h>
 #define PI 3.14
-#define USER_FORCE 475
+#define USER_FORCE 0.45
 #define ROBOT_RADIUS 0.5
 void callback(const sensor_msgs::LaserScan::ConstPtr&);
 void userCallback(const std_msgs::Float32&);
@@ -87,10 +87,12 @@ void callback(const sensor_msgs::LaserScan::ConstPtr& scan_in)
 
 	//  force = sqrt(pow(force_v[0],2) + pow(force_v[1],2));
 	//  theta = atan2(force_v[1],force_v[0])*PI/180;
-    theta=atan2(_force_y-user_y,_force_x-user_x)*180/PI;
+    
+    theta=atan2((_force_y/total_points)-user_y,(_force_x/total_points)-user_x)*180/PI;
     theta=theta+180;
     force_x=(force_x/total_points);//+user_x;
 	force_y=(force_y/total_points);//+user_y;
+	
 	//ROS_INFO("force_x:%f force_y: %f",force_x,force_y);
 	force=sqrt(pow(force_x,2)+pow(force_y,2));
 	ROS_INFO("theta: %f force: %f",theta,force);
