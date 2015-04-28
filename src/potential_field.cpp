@@ -6,17 +6,26 @@
 #include <math.h>
 #include <std_msgs/Float32.h>
 #define PI 3.14
+#define USER_FORCE 475
+#define ROBOT_RADIUS 0.5
 void callback(const sensor_msgs::LaserScan::ConstPtr&);
+void userCallback(const std_msgs::Float32&);
+float user_input=180;
 ros::Publisher theta_pub,f_pub;
 int main(int argc,char**argv)
 {
 	ros::init(argc,argv,"potential_field");
 	ros::NodeHandle n;
+	ros::Subscriber user_sub=n.subscribe("/tunnel/user_input",1,userCallback);
 	ros::Subscriber scan_sub=n.subscribe("/scan",1,callback);
 	theta_pub=n.advertise<std_msgs::Float32>("/tunnel/direction",1);
 	f_pub=n.advertise<std_msgs::Float32>("/tunnel/velocity",1);
 	ros::spin();
 	return 0;
+}
+void userCallback(const std_msgs::Float32& user_data)
+{
+	user_input=user_data.data;
 }
 
 void callback(const sensor_msgs::LaserScan::ConstPtr& scan_in)
@@ -32,6 +41,10 @@ void callback(const sensor_msgs::LaserScan::ConstPtr& scan_in)
 	float force,theta;
 	for (int i=0;i<total_points;i++)
 	{
+		if(scan_filtered.ranges[i]>ROBOT_RADIUS)
+		{
+		scan_filtered.ranges[i]=scan_filtered.ranges[i]-ROBOT_RADIUS;
+		}
 		if(scan_filtered.ranges[i]==0)
 		{		
 			scan_filtered.ranges[i]=5;
@@ -41,6 +54,9 @@ void callback(const sensor_msgs::LaserScan::ConstPtr& scan_in)
 	float force_y=0;
 	float _force_x=0;
 	float _force_y=0;
+	float user_force=USER_FORCE;
+	float user_x=user_force*cos(user_input*PI/180);
+	float user_y=user_force*sin(user_input*PI/180);
 	for (int i=0;i<total_points;i++)
 	{ 
 	  
@@ -51,12 +67,12 @@ void callback(const sensor_msgs::LaserScan::ConstPtr& scan_in)
 	  force_x+=x;
 	  force_y+=y;
 
-	  float x = -(scan_filtered.ranges[i]*cos(i*PI/180));
-	  float y = -(scan_filtered.ranges[i]*sin(i*PI/180));
+	  x = -(scan_filtered.ranges[i]*cos(i*PI/180));
+	  y = -(scan_filtered.ranges[i]*sin(i*PI/180));
 	  _force_x+=x;
 	  _force_y+=y;
 
-	/*   int x,y;
+	/* int x,y;
 	   int normal_x,normal_y;
 	   x = scan_filtered.ranges[i]*cos(i*PI/180);
 	   y = scan_filtered.ranges[i]*sin(i*PI/180);
@@ -68,12 +84,13 @@ void callback(const sensor_msgs::LaserScan::ConstPtr& scan_in)
 	   force_v[1]+=  forces[i][1];
 	*/ 
 	}
+
 	//  force = sqrt(pow(force_v[0],2) + pow(force_v[1],2));
 	//  theta = atan2(force_v[1],force_v[0])*PI/180;
-    theta=atan2(_force_y,_force_x)*180/PI;
+    theta=atan2(_force_y-user_y,_force_x-user_x)*180/PI;
     theta=theta+180;
-    force_x=(force_x/total_points);
-	force_y=(force_y/total_points);
+    force_x=(force_x/total_points);//+user_x;
+	force_y=(force_y/total_points);//+user_y;
 	//ROS_INFO("force_x:%f force_y: %f",force_x,force_y);
 	force=sqrt(pow(force_x,2)+pow(force_y,2));
 	ROS_INFO("theta: %f force: %f",theta,force);
