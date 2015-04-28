@@ -41,6 +41,10 @@ void callback(const sensor_msgs::LaserScan::ConstPtr& scan_in)
 	float force,theta;
 	for (int i=0;i<total_points;i++)
 	{
+		if(scan_filtered.ranges[i]>5)
+		{		
+			scan_filtered.ranges[i]=5;
+		}
 		if(scan_filtered.ranges[i]>ROBOT_RADIUS)
 		{
 		scan_filtered.ranges[i]=scan_filtered.ranges[i]-ROBOT_RADIUS;
