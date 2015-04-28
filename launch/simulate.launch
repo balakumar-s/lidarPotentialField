@@ -1,0 +1,7 @@
+<launch>
+<node pkg="joy" type="joy_node" name="joy_node" output="screen" respawn="true"/>
+<node pkg="lidar_potential_field" type="potential_field" name="potential_field" output="screen" respawn="true"/>
+
+<node pkg="vph_ros" type="user_input" name="user_input" output="screen" respawn="true"/>
+
+</launch>

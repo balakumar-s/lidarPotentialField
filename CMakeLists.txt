@@ -106,7 +106,8 @@ include_directories(
 
 ## Declare a cpp executable
 # add_executable(lidar_potential_field_node src/lidar_potential_field_node.cpp)
-add_executable(lidar_input_pcl src/lidar_input_pcl.cpp)
+#add_executable(lidar_input_pcl src/lidar_input_pcl.cpp)
+add_executable(potential_field src/potential_field.cpp)
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(lidar_potential_field_node lidar_potential_field_generate_messages_cpp)
@@ -115,7 +116,8 @@ add_executable(lidar_input_pcl src/lidar_input_pcl.cpp)
 # target_link_libraries(lidar_potential_field_node
 #   ${catkin_LIBRARIES}
 # )
-target_link_libraries(lidar_input_pcl ${catkin_LIBRARIES})
+#target_link_libraries(lidar_input_pcl ${catkin_LIBRARIES})
+target_link_libraries(potential_field ${catkin_LIBRARIES})
 
 #############
 ## Install ##
