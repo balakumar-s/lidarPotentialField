@@ -153,10 +153,10 @@ void control_function()
 	}	
 	else if(on==1)
 	{
-	fl.data=joy_x-joy_y-joy_yaw;//+vph_angle;
-	fr.data=joy_x+joy_y+joy_yaw;//-vph_angle;
-	bl.data=joy_x+joy_y-joy_yaw;//+vph_angle;
-	br.data=joy_x-joy_y+joy_yaw;//-vph_angle;
+	fl.data=joy_x-joy_y-joy_yaw;
+	fr.data=joy_x+joy_y+joy_yaw;
+	bl.data=joy_x+joy_y-joy_yaw;
+	br.data=joy_x-joy_y+joy_yaw;
 	}
 	fl_pub.publish(fl);
 	fr_pub.publish(fr);
