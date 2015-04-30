@@ -14,8 +14,8 @@
 //Defining constants
 #define PI 3.14
 #define USER_FORCE  1// Change this to priortize goal
-#define ROBOT_RADIUS 0.1// Change this to robot's dimensions.
-#define MAX_RANGE 0.3
+#define ROBOT_RADIUS 0.2// Change this to robot's dimensions.
+#define MAX_RANGE 1
 //Declaring functions
 void callback(const sensor_msgs::LaserScan::ConstPtr&);
 void userCallback(const std_msgs::Float32&);
@@ -94,7 +94,6 @@ void callback(const sensor_msgs::LaserScan::ConstPtr& scan_in)
 	{ 
 		if(scan_filtered.ranges[i]!=MAX_RANGE)
 		{
-
 		float x_lidar = input_cloud[i].x;
 		float y_lidar = input_cloud[i].y;
 	    //ROS_INFO("x:%0.2f y:%0.2f",x_lidar,y_lidar);
@@ -124,7 +123,6 @@ void callback(const sensor_msgs::LaserScan::ConstPtr& scan_in)
 		  _force_y+=y;
 		  non_zero_points++;
 	  }
-
 	}
 	}
 	}
@@ -143,7 +141,7 @@ void callback(const sensor_msgs::LaserScan::ConstPtr& scan_in)
 	}
 	//ROS_INFO("x:%0.2f y:%0.2f",resultant_x,resultant_y);
 
-    theta=atan2(resultant_y+user_y,resultant_x+user_x)*180/PI;
+    theta=atan2(-(resultant_y+user_y),-(resultant_x+user_x))*180/PI;
     // The range is shifted to 0-359 degrees.
     if(theta<0)
     {

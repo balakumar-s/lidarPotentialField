@@ -1,6 +1,6 @@
 <launch>
 <node pkg="joy" type="joy_node" name="joy_node" output="screen" respawn="true"/>
-<node pkg="lidar_potential_field" type="potential_field" name="potential_field" output="screen" respawn="true"/>
+<node pkg="lidar_potential_field" type="hw_pot_field" name="hw_pot_field" output="screen" respawn="true"/>
 
 <node pkg="lidar_potential_field" type="hw_user_input" name="hw_user_input" output="screen" respawn="true"/>
 
