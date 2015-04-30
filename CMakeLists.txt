@@ -110,6 +110,7 @@ include_directories(
 add_executable(potential_field src/potential_field.cpp)
 add_executable(hw_user_input src/hw_user_input.cpp)
 add_executable(lidar_improved src/lidar_improved.cpp)
+add_executable(pot_frame_transformed src/pot_frame_transformed.cpp)
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(lidar_potential_field_node lidar_potential_field_generate_messages_cpp)
@@ -122,6 +123,7 @@ add_executable(lidar_improved src/lidar_improved.cpp)
 target_link_libraries(potential_field ${catkin_LIBRARIES})
 target_link_libraries(hw_user_input ${catkin_LIBRARIES})
 target_link_libraries(lidar_improved ${catkin_LIBRARIES})
+target_link_libraries(pot_frame_transformed ${catkin_LIBRARIES})
 
 #############
 ## Install ##
